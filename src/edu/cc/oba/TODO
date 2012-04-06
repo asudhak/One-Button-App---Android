@@ -1,0 +1,21 @@
+Inactive one Buttons: Store state of previously used oneButtons (Top 5)
+Logic : if the same button is active, do not show in inactive list. 
+
+
+Hide user password
+
+
+
+Take care of preferences
+to store password ( Shared preferences)
+
+Catch access denied
+
+
+
+
+DONE:============
+Current Reservation Tab:
+Remove connect now button and remove unwanted details, make it into a list view with all the details - DONE
+Add logout functionality
+Add RDP func - DONE

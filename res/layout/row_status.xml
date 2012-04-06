@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="match_parent"
+	android:padding="5sp"
+	android:layout_width="match_parent">
+	<TextView
+		android:layout_height="wrap_content"
+		android:id="@+id/tab3_imageName"
+		android:text="Name"
+		android:textSize="12sp"
+		android:layout_width="wrap_content"
+		android:layout_weight="5"
+		android:gravity="left"></TextView>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/tab3_status"
+		android:text="Value"
+		android:layout_weight="4"
+		android:textSize="12sp"
+		></TextView>
+	<TextView
+		android:layout_height="wrap_content"
+		android:id="@+id/tab3_time"
+		android:text="Lat"
+		android:textSize="12sp"
+		android:layout_width="wrap_content"
+		android:layout_weight="1"
+		></TextView>
+	
+	<TextView
+		android:layout_height="0px"
+		android:id="@+id/tab3_hidden_req"
+		android:text="Lat"
+		android:textSize="0px"
+		android:layout_width="0px"
+		></TextView>
+	
+	
+</LinearLayout>

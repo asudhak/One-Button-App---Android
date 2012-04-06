@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    
+     
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Connection" />
+    <TextView
+        android:id="@+id/conn_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connecting..." />
+    
+    <ListView
+    android:id="@+id/tab3_listView"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+	</ListView>
+    
+    <Button
+        android:id="@+id/conn_refresh"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Refresh"
+        android:onClick="refresh"
+        />
+    
+     
+    
+</LinearLayout>
