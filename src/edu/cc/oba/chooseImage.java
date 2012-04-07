@@ -3,7 +3,7 @@ package edu.cc.oba;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import edu.cc.oba.TestOBA.makeReservation;
+
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -89,9 +89,9 @@ public class chooseImage extends Activity {
   {
     	
     	
-    	makeReservation reserveTask=TestOBA.oba.new makeReservation();
+//    	makeReservation reserveTask=TestOBA.oba.new makeReservation();
     	Log.d("Trying to make reservation for ", ""+image_id);
-    	reserveTask.execute(image_id);
+    	TestOBA.oba.makeReservation(image_id);
     	    }
     
     

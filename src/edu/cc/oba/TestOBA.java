@@ -98,14 +98,12 @@ public class TestOBA extends Activity {
 	
 	
 	
-	public class makeReservation extends AsyncTask<Integer, Void, Boolean>{
+	public void makeReservation(int image_id)
+	{
 		
-		@Override
-		protected Boolean doInBackground(Integer... image_id_arr) {
-			
 		String[] params = new String[3];
 //		int image_id = 2422; // VCL2.2.1 SandBox image id 
-		int image_id=image_id_arr[0];
+		
 
 		params[0] = Integer.toString(image_id);
 		params[1] = "now";
@@ -115,65 +113,16 @@ public class TestOBA extends Activity {
 		//here
 		HashMap result = (HashMap) xmlRPCcall("XMLRPCaddRequest", params);
 
-		boolean success_in_resv = false;
-		
+			
 		Log.d("Hash Table",result.toString());
 		
-		/*if (result.get("status").equals("success")) {
-			int request_id = Integer.parseInt((String) result.get("requestid"));
-			
-			
-			
-			TestOBA.oba.activeRequests.add(request_id);
-			System.out
-					.println("Succeed in making the reservation, request id is: "
-							+ request_id);
-
-			// Check whether the reservation is ready
-			while (true) {
-				HashMap status = getRequestStatus(request_id);
-
-				if (status.get("status").equals("ready")) {
-					System.out.println("The reservation is ready!");
-					Log.d("Active Requests" , oba.activeRequests.toString());
-					success_in_resv = true;
-					break;
-				} else if (status.get("status").equals("loading")) {
-					
-					int remain_time = (Integer) status.get("time");
-					try {
-						System.out
-								.println("The reservation is still loading with "
-										+ remain_time + " minutes remained...");
-						// Wait for half of the remaining time and then check again. 
-						if (remain_time <= 1) {
-							TimeUnit.SECONDS.sleep(30);
-						} else {							
-							TimeUnit.MINUTES.sleep((int)(remain_time / 2));
-						}
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				} else {
-					System.err.println("Fail to make a reservation.");
-					break;
-				}
-			}
-		} else {
-			System.err.println("Fail to make a reservation.");
-		}
-*/
+				
 		
-		return success_in_resv;
 		}
 		
-		protected void onPostExecute(Long result) {
-	         Log.d("Reservation", "Executed");
-	     }
-
 		
-	}	
+		
+	
 	
 	
 	

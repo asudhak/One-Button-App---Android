@@ -6,12 +6,11 @@ Hide user password
 
 
 
-Take care of preferences
-to store password ( Shared preferences)
 
 Catch access denied
 
-
+Async Task to prevent errors of using the same XML RPC calls
+Improve performance of 2nd tab
 
 
 DONE:============
