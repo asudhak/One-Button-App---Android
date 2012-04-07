@@ -1,6 +1,8 @@
 package edu.cc.oba;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -184,17 +186,20 @@ public class TestOBA extends Activity {
 
 	public String[] getConnectData() {
 		InetAddress addr;
-		String ipAddr;
+		String ipAddr="";
 
-		try {
-			addr = InetAddress.getLocalHost();
-			// Get IP Address
-			ipAddr = addr.getHostAddress();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+		
+	        try {
+	            URL autoIP = new URL("http://api.externalip.net/ip/");
+	            BufferedReader in = new BufferedReader( new InputStreamReader(autoIP.openStream()));
+	            ipAddr = (in.readLine()).trim();
+	            
+	         }catch (Exception e){
+		    	e.printStackTrace();
+	            
+		    }
+	    
+		
 
 		Object[] params = { this.activeRequests.get(0), ipAddr };
 		// Object[] params = { 1744326, ipAddr };
