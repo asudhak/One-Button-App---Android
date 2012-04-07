@@ -1,5 +1,6 @@
 package edu.cc.oba;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,8 +65,8 @@ public class oneButtons extends Activity {
 					Toast.makeText(getBaseContext(), conn_data.toString(),
 							Toast.LENGTH_LONG);
 					Log.i("COnnDATA", conn_data.toString());
-
-					if (imagename.contains("Win"))
+					
+					 if(isHostRDPReady(conn_data[0]))
 						StartRdpIntent(conn_data);
 					else
 						conn_do_ssh(conn_data, imagename); // On Click of
@@ -193,6 +194,22 @@ public class oneButtons extends Activity {
 		return list;
 	}
 
+	
+	/**
+	 * Determine if the host is ready for an RDP connection
+	 * @param ipAddress
+	 * @return
+	 */
+	public static boolean isHostRDPReady(String ipAddress){
+		try {
+			@SuppressWarnings("unused")
+			Socket socket = new Socket(ipAddress, 3389);
+		}catch(Exception e) {
+			return false;
+		}
+		
+		return true;
+	}
 	static int i;
 
 	public void conn_do_ssh(String[] conn_data_secure, String imagename) {
@@ -308,6 +325,7 @@ public class oneButtons extends Activity {
 					"Please install REMOTE RDP from the Android Market to be able to remotely connect to this Reservation",
 					Toast.LENGTH_LONG).show();
 		}
+		
 		intent.putExtra(REMOTE_SERVER, conn_data[0]);
 		intent.putExtra(REMOTE_PORT, PORT);
 		// following are optional:
