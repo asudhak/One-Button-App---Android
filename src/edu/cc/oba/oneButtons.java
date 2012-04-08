@@ -210,8 +210,12 @@ public class oneButtons extends Activity {
 		try {
 			@SuppressWarnings("unused")
 			Socket socket = new Socket(ipAddress, 3389);
+			Log.d("RDP", "connect to 3389 succeeded");
 		}catch(Exception e) {
+			Log.d("RDP", "Unable to connect to 3389");
+			e.printStackTrace();
 			return false;
+			
 		}
 		
 		return true;

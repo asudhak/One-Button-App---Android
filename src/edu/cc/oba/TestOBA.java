@@ -44,8 +44,6 @@ public class TestOBA extends Activity {
 				
 		this.client = new XMLRPCClient("https://vcl.ncsu.edu/scheduling/index.php?mode=xmlrpccall",username, password);
 			}
-
-
 //		//here
 	
 	
@@ -123,11 +121,6 @@ public class TestOBA extends Activity {
 		}
 		
 		
-		
-	
-	
-	
-	
 	public HashMap getRequestStatus(int request_id) {
 		Object[] params = new Object[1];
 		params[0] = request_id;
@@ -323,27 +316,5 @@ public class TestOBA extends Activity {
 		Log.d("Requests for this user ", oba.activeRequests.toString());
 	}
 
-	/*
-	public static void main(String[] args) {
-	
-		oba = new TestOBA(args[0], args[1]);
-				
-//		 oba.getImageID();		
-		if (oba.makeReservation(1)) {
-			String[] conn_data = oba.getConnectData();
 
-			// Now launch a Linux terminal to SSH to the reserved machine.
-			try {
-				// Wait for a short time between getConnectData and termLaunch, since the VCL needs time to process
-				// remote IP in its firewall. 
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			oba.termLaunch(conn_data);
-			// oba.cancelReservation();
-		}
-	}
-*/
 }
