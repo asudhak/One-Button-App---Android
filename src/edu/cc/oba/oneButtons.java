@@ -326,6 +326,7 @@ public class oneButtons extends Activity {
 					Toast.LENGTH_LONG).show();
 		}
 		
+		
 		intent.putExtra(REMOTE_SERVER, conn_data[0]);
 		intent.putExtra(REMOTE_PORT, PORT);
 		// following are optional:

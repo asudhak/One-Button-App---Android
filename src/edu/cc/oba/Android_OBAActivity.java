@@ -56,11 +56,7 @@ public class Android_OBAActivity extends Activity {
 	    
 	    final String username=user_name.getText().toString();
 	      final String password=pass_word.getText().toString();
-	      
-
-		    
-		    
-	      		      
+	            
 		    //Stored user name and pass in shared prefs . need more security ?
 			
 		
@@ -68,6 +64,8 @@ public class Android_OBAActivity extends Activity {
 	    
         final Button logIn= (Button) this.findViewById(R.id.Login);
         
+    
+    
         logIn.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -80,7 +78,7 @@ public class Android_OBAActivity extends Activity {
 			      try{
 			    	  TestOBA.getUserObject(username, password);
 			    	  auth=true;
-			      }
+			    	  			      }
 			      catch(NullPointerException e)
 			      {
 			    	  Toast.makeText(getBaseContext(), "Check your Password", 4).show();
@@ -97,16 +95,18 @@ public class Android_OBAActivity extends Activity {
 				Intent myIntent = new Intent(Android_OBAActivity.this, mainUITabs.class);
 				myIntent.putExtra("username", username);
 				myIntent.putExtra("password", password);
-				Android_OBAActivity.this.startActivity(myIntent);			
+				Android_OBAActivity.this.startActivity(myIntent);	
+				
 			      }
+			      
 			}
         
         });
         
         }
+    
+    
+    
+    
     }
-    
-    
-    
-    
 }

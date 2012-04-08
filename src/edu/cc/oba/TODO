@@ -4,9 +4,6 @@ Logic : if the same button is active, do not show in inactive list.
 
 Hide user password
 
-
-
-
 Catch access denied
 
 Async Task to prevent errors of using the same XML RPC calls
