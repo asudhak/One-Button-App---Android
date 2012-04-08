@@ -66,8 +66,13 @@ public class oneButtons extends Activity {
 							Toast.LENGTH_LONG);
 					Log.i("COnnDATA", conn_data.toString());
 					
-					 if(isHostRDPReady(conn_data[0]))
-						StartRdpIntent(conn_data);
+					 if(isHostRDPReady(conn_data[0])){
+						try{
+							StartRdpIntent(conn_data);
+						}
+					 catch(ActivityNotFoundException e){
+						 Toast.makeText(getBaseContext(), "Please install RDP Client", 4).show();
+					 }}
 					else
 						conn_do_ssh(conn_data, imagename); // On Click of
 															// Listview, get
@@ -146,6 +151,7 @@ public class oneButtons extends Activity {
 		final ListView listView = (ListView) findViewById(R.id.listView);
 
 		listView.setAdapter(adapter);
+		
 		listView.setTextFilterEnabled(true);
 
 	}
@@ -234,7 +240,12 @@ public class oneButtons extends Activity {
 			Notification notification = new Notification(icon, tickerText, when);
 
 			CharSequence contentTitle = "Password for this reservation is";
-			CharSequence contentText = conn_data_secure[2];
+			
+			CharSequence contentText="";
+			if(conn_data_secure[2]==getPreferences(0).getString("pass", ""))
+				contentText="Your Campus Password";
+			else	
+			contentText = conn_data_secure[2];
 			Intent notificationIntent = new Intent(this, oneButtons.class);
 			PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 					notificationIntent, 0);

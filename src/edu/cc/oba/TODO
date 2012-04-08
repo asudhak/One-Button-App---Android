@@ -4,7 +4,6 @@ Logic : if the same button is active, do not show in inactive list.
 
 Hide user password
 
-Catch access denied
 
 Async Task to prevent errors of using the same XML RPC calls
 Improve performance of 2nd tab
@@ -15,3 +14,5 @@ Current Reservation Tab:
 Remove connect now button and remove unwanted details, make it into a list view with all the details - DONE
 Add logout functionality
 Add RDP func - DONE
+
+Catch access denied

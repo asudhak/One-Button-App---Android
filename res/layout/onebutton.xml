@@ -7,7 +7,7 @@
 
 <TextView
     android:id="@+id/description"
-    android:text="One Buttons -Active" 
+    android:text="One Buttons -Click to Start" 
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     
@@ -22,7 +22,7 @@
 
 <TextView
     android:id="@+id/description"
-    android:text="One Buttons -InActive" 
+    android:text="My OneButtons" 
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     

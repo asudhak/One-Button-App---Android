@@ -91,6 +91,7 @@ public class chooseImage extends Activity {
     	
 //    	makeReservation reserveTask=TestOBA.oba.new makeReservation();
     	Log.d("Trying to make reservation for ", ""+image_id);
+    	Toast.makeText(getBaseContext(), "Your One Button will be created", 3);
     	TestOBA.oba.makeReservation(image_id);
     	    }
     
