@@ -6,10 +6,7 @@
     
      
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Create Connection" />
+   
     <TextView
         android:id="@+id/conn_status"
         android:layout_width="wrap_content"
