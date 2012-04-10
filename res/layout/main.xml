@@ -30,17 +30,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword" />
 
-    <CheckBox
-        android:id="@+id/rememberme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Remember Me" />
-
-    <CheckBox
-        android:id="@+id/autologin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Automatically Log me in" />
+    
 
     <Button
         android:id="@+id/Login"
