@@ -230,17 +230,7 @@ public class TestOBA extends Activity {
 	//Overridden GetConnectData ( Possible delete of previous)
 	public String[] getConnectData(int req_id) {
 		InetAddress addr;
-		String ipAddr;
-
-		try {
-			addr = InetAddress.getLocalHost();
-			// Get IP Address
-			ipAddr = addr.getHostAddress();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+		String ipAddr=getMyPublicIP();
 
 		Object[] params = { req_id, ipAddr };
 		// Object[] params = { 1744326, ipAddr };
@@ -297,6 +287,19 @@ public class TestOBA extends Activity {
 			e.printStackTrace();
 		}
 	}
+	
+	private String getMyPublicIP(){
+        try {
+            URL autoIP = new URL("http://api.externalip.net/ip/");
+            BufferedReader in = new BufferedReader( new InputStreamReader(autoIP.openStream()));
+            String ip_address = (in.readLine()).trim();
+            return ip_address;
+         }catch (Exception e){
+	    	e.printStackTrace();
+            return "ERROR";
+	    }
+    }
+	
 	
 	public static void getUserObject(String username, String password)
 	{
