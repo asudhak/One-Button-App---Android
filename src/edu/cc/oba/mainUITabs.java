@@ -47,7 +47,7 @@ public class mainUITabs extends TabActivity {
 
 		intent = new Intent().setClass(this, chooseImage.class);		
 		spec = tabHost.newTabSpec("New Reservation").setIndicator("New Reservation",
-	                      res.getDrawable(R.drawable.tab1))
+	                      res.getDrawable(R.drawable.tab2))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 	    
@@ -58,7 +58,7 @@ public class mainUITabs extends TabActivity {
 		intent.putExtra("password", getIntent().getStringExtra("password"));
 		
 	    spec = tabHost.newTabSpec("Current Reservation").setIndicator("Current Reservation",
-	                      res.getDrawable(R.drawable.tab2)).setContent(intent);
+	                      res.getDrawable(R.drawable.tab3)).setContent(intent);
 	    tabHost.addTab(spec);
 	    
 	    
