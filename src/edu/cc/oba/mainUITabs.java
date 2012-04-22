@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -27,8 +28,29 @@ public class mainUITabs extends TabActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-	    setContentView(R.layout.tab);
+		ConnectivityManager cm = null;
+		try{
+			cm = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+		}
+		catch(NullPointerException e)
+		{
+			Toast.makeText(getBaseContext(), "No Internet ConnectioN Found", 4).show();
+		};
+		    
+		   try{ if( cm.getActiveNetworkInfo().isConnectedOrConnecting()==false)
+		    {
+		    	Toast.makeText(getBaseContext(), "No Internet ConnectioN Found", 4).show();
+		    }}
+		   catch(NullPointerException e)
+	    	  {
+	    		Toast.makeText(getBaseContext(), "No Internet ConnectioN Found", 4).show();
+	    		  
+	    	  }
+		
+		setContentView(R.layout.tab);
 	    mTabHost=getTabHost();
+	    
+	    
 
 	    Resources res = getResources(); // Resource object to get Drawables
 	    TabHost tabHost = getTabHost();  // The activity TabHost

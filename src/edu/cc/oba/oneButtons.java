@@ -244,7 +244,16 @@ public class oneButtons extends Activity {
 			Notification notification = new Notification(icon, tickerText, when);
 
 			CharSequence contentTitle = "Password for this reservation is";
+			
 			CharSequence contentText = conn_data_secure[2];
+			//If password and stored password are the same
+			if(conn_data_secure[2].equalsIgnoreCase(Android_OBAActivity.settings.getString("pass", "")))
+					{
+				contentText = "Use your Campus Password";	
+					}
+			
+			
+			
 			Intent notificationIntent = new Intent(this, oneButtons.class);
 			PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 					notificationIntent, 0);

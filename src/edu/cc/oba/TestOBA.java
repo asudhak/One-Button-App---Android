@@ -234,6 +234,7 @@ public class TestOBA extends Activity {
 
 		Object[] params = { req_id, ipAddr };
 		// Object[] params = { 1744326, ipAddr };
+		Log.d("IP ADDR", ipAddr);
 
 		HashMap result = (HashMap) xmlRPCcall("XMLRPCgetRequestConnectData",
 				params);
