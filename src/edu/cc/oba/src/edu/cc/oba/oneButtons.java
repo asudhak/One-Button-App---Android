@@ -5,16 +5,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,24 +23,25 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class oneButtons extends Activity {
 	public static TabHost mTabHost;
+	final String imageStatus = null;
 
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.onebutton);
 
-		// List view of all one buttons (Only Name)
-		// get active requests for the user (For now)
-		updateListView();
+		// One Buttons
 
-		updateHistory();
+		// List view of all one buttons (Only Name)
+		// get active requests for the user (For now) and inactive list.
+		updateListViewActive();
+		updateListViewInactive();
 
 		final ListView listView = (ListView) findViewById(R.id.listView);
 
@@ -67,7 +68,9 @@ public class oneButtons extends Activity {
 					if (imagename.contains("Win"))
 						StartRdpIntent(conn_data);
 					else
-						conn_do_ssh(conn_data, imagename);
+						conn_do_ssh(conn_data, imagename); // On Click of
+															// Listview, get
+															// putty/rdp
 				} else if (status.compareToIgnoreCase("loading") == 0) {
 					Toast.makeText(getBaseContext(),
 							"Please wait till your reservation is ready",
@@ -76,8 +79,39 @@ public class oneButtons extends Activity {
 					Toast.makeText(getBaseContext(),
 							"Your reservation has timed out", Toast.LENGTH_LONG)
 							.show();
+					updateListViewActive();
+					updateListViewInactive(); // at the same time, we need to
+												// add it into the inactive
+												// list and update the active list.
 				}
 
+			}
+
+		});
+		
+		final ListView listViewInactive = (ListView) findViewById(R.id.listView_inactive);
+		
+		listViewInactive.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> arg0, View v, int position,
+					long id) {
+				// Toast.makeText(getBaseContext(),
+				// ((TextView)v.findViewById(R.id.lngValue)).getText().toString(),4).show();
+
+				final int request_id = Integer.parseInt(((TextView) v
+						.findViewById(R.id.listView_inactive)).getText()
+						.toString());
+				
+				AlertDialog adb = new AlertDialog.Builder(this).create();
+				adb.setCancelable(true);
+				adb.setButton("ACTIVATE",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								// TODO Auto-generated method stub
+								// CODE TO EXTEND RESERVATION
+
+							}
+						});
 			}
 
 		});
@@ -89,82 +123,51 @@ public class oneButtons extends Activity {
 					public void onTabChanged(String tabId) {
 						// TODO Auto-generated method stub
 						if (tabId.compareTo(("One Buttons")) == 0) {
-
-							updateListView();
+							updateListViewActive();
+							updateListViewInactive();
 						}
-
 					}
-
 				});
-
-		// On Click of Listview, get putty/rdp
-
 		// Show user active and inactive one buttons
-
 	}
 
-	private void updateListView() {
-		ArrayList<Map<String, String>> list = build();
-
-		/* here we add the item into the history database! */
-		ContentValues values = new ContentValues();
-		for (int i = 0; i < list.size(); i++) {
-			values.clear();
-			values.put(ImageDB.KEY_IMAGENAME, list.get(i).get("imagename")
-					.toString());
-			values.put(ImageDB.KEY_REQUESTID, list.get(i).get("requestid")
-					.toString());
-			values.put(ImageDB.KEY_STATUS, list.get(i).get("status").toString());
-			getContentResolver().insert(ImageDB.CONTENT_URI, values);
-			System.out.println("Success Insert! " + values.toString());
-		}
-
+	private void updateListViewActive() {
+		ArrayList<Map<String, String>> list = build(1);
+		
 		String[] from = { "imagename", "requestid", "status" };
 		int[] to = { R.id.imageName, R.id.imageID, R.id.imageStatus };
-		
-//		System.out.println("Hello" + list.get(i).get("status").toString());
 
-		ArrayList<Map<String, String>> list_active = new ArrayList<Map<String, String>>();
-		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).get("status").toString().equals("loading") 
-					|| list.get(i).get("status").toString().equals("ready")) {
-				boolean add = list_active.add(list.get(i));
-				System.out.println("Active_list adding " + add);
-			}
-			else
-				System.out.println("It is not an active item!");
-		}
+		System.out.println(list.toString());
 
-		if (list_active.size() > 0) {
+		SimpleAdapter adapter = new SimpleAdapter(this, list, R.layout.row,
+				from, to);
 
-			SimpleAdapter adapter = new SimpleAdapter(this, list_active,
-					R.layout.row, from, to);
+		final ListView listView = (ListView) findViewById(R.id.listView);
 
-			final ListView listView = (ListView) findViewById(R.id.listView);
-
-			listView.setAdapter(adapter);
-			listView.setTextFilterEnabled(true);
-		}
-	}
-
-	private void updateHistory() {
-		ContentResolver cr = getContentResolver();
-		Cursor cursor = cr.query(ImageDB.CONTENT_URI, null, null, null, null);
-
-		String[] from = { ImageDB.KEY_IMAGENAME, ImageDB.KEY_REQUESTID,
-				ImageDB.KEY_STATUS };
-		int[] to = { R.id.imageName, R.id.imageID, R.id.imageStatus };
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-				R.layout.row, cursor, from, to);
-
-		final ListView listView = (ListView) findViewById(R.id.listView_inactive);
 		listView.setAdapter(adapter);
 		listView.setTextFilterEnabled(true);
 
 	}
 
+	private void updateListViewInactive() {
+		ArrayList<Map<String, String>> list = build(0);
+
+		String[] from = { "imagename", "requestid", "status" };
+		int[] to = { R.id.imageName, R.id.imageID, R.id.imageStatus };
+
+		System.out.println(list.toString());
+
+		SimpleAdapter adapter = new SimpleAdapter(this, list, R.layout.row,
+				from, to);
+
+		final ListView listView = (ListView) findViewById(R.id.listView_inactive);
+
+		listView.setAdapter(adapter);
+		listView.setTextFilterEnabled(true);
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ArrayList<Map<String, String>> build() {
+	public ArrayList<Map<String, String>> build(int act) {
 		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		HashMap requests = TestOBA.oba.getRequestIDs();
 		Object[] req_id = (Object[]) requests.get("requests");
@@ -177,8 +180,14 @@ public class oneButtons extends Activity {
 			obaImagesHash.putAll(req_status);
 			System.out.println("Adding to array: "
 					+ obaImagesHash.get("requestid").toString());
-			list.add(obaImagesHash);
-
+			if (act == 0){
+				if (obaImagesHash.get("status").toString().compareToIgnoreCase("timedout") == 0)
+					list.add(obaImagesHash);
+			}
+			else{
+				if (obaImagesHash.get("status").toString().compareToIgnoreCase("ready") == 0 || obaImagesHash.get("status").toString().compareToIgnoreCase("loading") == 0)
+					list.add(obaImagesHash);
+			}
 		}
 
 		return list;
