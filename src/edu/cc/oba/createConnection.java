@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -122,6 +123,40 @@ public class createConnection extends Activity {
 		
 		}
 		
+    @Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	    	 AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	            adb.setCancelable(true);
+	            
+	            adb.setNeutralButton("Yes", new DialogInterface.OnClickListener(){
+	          	  @Override
+	        		public void onClick(DialogInterface arg0, int arg1) {
+	        			// TODO Auto-generated method stub
+	        			//CODE TO EXTEND RESERVATION
+	          		  finish();
+	        		}
+	            });
+	          	  
+	          	  adb.setMessage("Do you Want to Exit");
+	          	  adb.show();
+	          	  
+	            
+	            adb.setNegativeButton("No", new DialogInterface.OnClickListener(){
+	          	
+	      		@Override
+	      		public void onClick(DialogInterface arg0, int arg1) {
+	      			// TODO Auto-generated method stub
+	      			
+	      			     				
+	      		}
+	          	  
+	            });
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
+
     
     public void updateListView()
     {

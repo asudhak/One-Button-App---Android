@@ -3,13 +3,16 @@ package edu.cc.oba;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.AlertDialog;
 import android.app.TabActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -66,6 +69,42 @@ public class mainUITabs extends TabActivity {
 	    	    
 	}
 	
+	//Catch Back button event
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	    	 AlertDialog.Builder adb = new AlertDialog.Builder(this);
+	            adb.setCancelable(true);
+	            
+	            adb.setNeutralButton("Yes", new DialogInterface.OnClickListener(){
+	          	  @Override
+	        		public void onClick(DialogInterface arg0, int arg1) {
+	        			// TODO Auto-generated method stub
+	        			//CODE TO EXTEND RESERVATION
+	          		  finish();
+	        		}
+	            });
+	          	  
+	          	  adb.setMessage("Do you Want to Exit");
+	          	  adb.show();
+	          	  
+	            
+	            adb.setNegativeButton("No", new DialogInterface.OnClickListener(){
+	          	
+	      		@Override
+	      		public void onClick(DialogInterface arg0, int arg1) {
+	      			// TODO Auto-generated method stub
+	      			
+	      			     				
+	      		}
+	          	  
+	            });
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
+
 	 
     // Initiating Menu XML file (menu.xml)
     @Override
