@@ -1,5 +1,6 @@
 package edu.cc.oba;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -39,6 +40,7 @@ public class chooseImage extends Activity {
 	int typeBar; // Determines type progress bar: 0 = spinner, 1 = horizontal
 	int delay = 1000; // Milliseconds of delay in the update loop (1 second)
 	int maxBarValue = 200; // Maximum value of horizontal progress bar
+	long initTime = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -87,13 +89,16 @@ public class chooseImage extends Activity {
 			}
 
 		});
-		
-		
-		
+
 		processBar = (Button) findViewById(R.id.ProBar);
 		processBar.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				typeBar = 1;
+				maxBarValue = maxBarValue
+						- (int) ((System.currentTimeMillis() - initTime) / 1000);
+				if (maxBarValue < 0) {
+					maxBarValue = 0;
+				}
 				showDialog(typeBar);
 			}
 		});
@@ -168,9 +173,12 @@ public class chooseImage extends Activity {
 				int end = list.get(i).toString().indexOf("requestid");
 				String loadingTime = list.get(i).toString()
 						.substring(start + 5, end - 2);
+				initTime = System.currentTimeMillis();
 
-				maxBarValue = Integer.parseInt(loadingTime) * 60; // seconds
-				System.out.println("The loadingTime is: " + maxBarValue + "");
+				maxBarValue = (Integer.parseInt(loadingTime) * 60 - (int) ((System
+						.currentTimeMillis() - initTime) / 1000)); // seconds
+				System.out.println("The loadingTime is: " + maxBarValue
+						+ " and the time=" + loadingTime);
 			}
 		}
 
@@ -179,26 +187,15 @@ public class chooseImage extends Activity {
 	// Method to create a progress bar dialog of either spinner or horizontal
 	// type
 	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-		case 0: // Spinner
-			progDialog = new ProgressDialog(this);
-			progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			progDialog.setMessage("Loading...");
-			progThread = new ProgressThread(handler);
-			progThread.start();
-			return progDialog;
-		case 1: // Horizontal
-			progDialog = new ProgressDialog(this);
-			progDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			progDialog.setMax(maxBarValue);
-			progDialog.setMessage("On Processing ...");
-			progThread = new ProgressThread(handler);
-			progThread.start();
-			return progDialog;
-		default:
-			return null;
-		}
+	protected Dialog onCreateDialog(int typeBar) {
+
+		progDialog = new ProgressDialog(this);
+		progDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		progDialog.setMax(maxBarValue);
+		progDialog.setMessage("On Processing ...");
+		progThread = new ProgressThread(handler);
+		progThread.start();
+		return progDialog;
 	}
 
 	// Handler on the main (UI) thread that will receive messages from the
