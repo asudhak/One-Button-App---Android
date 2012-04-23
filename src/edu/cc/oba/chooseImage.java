@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,7 +29,15 @@ public class chooseImage extends Activity {
 	public int image_id = 0;
 	public String[] conn_data;
 	public static Boolean flag = false;
-
+	
+	Button processbar;
+	ProgressDialog progressBar;
+	private int progressBarStatus = 0;
+	private Handler progressBarHandler = new Handler();
+ 
+	private long fileSize = 0;
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -76,8 +85,33 @@ public class chooseImage extends Activity {
 			}
 
 		});
+		
+		processbar = (Button) findViewById(R.id.ProBar);
+		processbar.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// prepare for a progress bar dialog
+				ProgressDialog progressBar = new ProgressDialog(v.getContext());
+				progressBar.setCancelable(true);
+				progressBar.setMessage("Image Reservation Processing ...");
+				progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+				progressBar.setProgress(0);
+				progressBar.setMax(100);
+				progressBar.show();
+				
+				//reset progress bar status
+				progressBarStatus = 0;
+				
+				
+				
+				
+			}
+		});
 
 	}
+	
+	
+	
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -110,10 +144,6 @@ public class chooseImage extends Activity {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
-	// Process button to start horizontal progress bar dialog with anonymous
-	// inner class
-	Button processbar = (Button) findViewById(R.id.ProBar);
 	
 
 	public void image_Reserve(View v) {
