@@ -1,44 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tab0"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:id="@+id/tab0" >
+    android:orientation="vertical" >
 
-<TextView
-    android:id="@+id/description"
-    android:text="One Buttons -Click to Start" 
-    android:textColor="#00FF00"
-    android:textStyle="bold"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    
-    >
-</TextView>
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#9900CC"
+        android:text="One Buttons -Click to Start"
+        android:textColor="#FFFFFF"
+        android:textSize="17dp"
+        android:textStyle="bold" >
+    </TextView>
 
-<ListView
-    android:id="@+id/listView"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
-</ListView>
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
 
-<TextView
-    android:id="@+id/description"
-    android:text="My OneButtons" 
-    android:textColor="#00FF00"
-    android:textStyle="bold"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    
-    >
-</TextView>
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#9900CC"
+        android:text="My OneButtons (IMG, ID, DATE)"
+        android:textColor="#FFFFFF"
+        android:textSize="17dp"
+        android:textStyle="bold" >
+    </TextView>
 
-<ListView
-    android:id="@+id/listView_inactive"
-    android:layout_width="fill_parent"
-    android:layout_height="234dp" >
-</ListView>
+    <ListView
+        android:id="@+id/listView_inactive"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
 
-
-
-    </LinearLayout>
+</LinearLayout>

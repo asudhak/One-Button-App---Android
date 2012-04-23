@@ -21,9 +21,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
@@ -144,40 +147,94 @@ public class oneButtons extends Activity {
 
 		/* here we add the item into the history database! */
 		ContentValues values = new ContentValues();
-		for (int i = 0; i < list.size(); i++) {
-			values.clear();
-			values.put(ImageDB.KEY_IMAGENAME, list.get(i).get("imagename")
-					.toString());
-			values.put(ImageDB.KEY_REQUESTID, list.get(i).get("requestid")
-					.toString());
-			values.put(ImageDB.KEY_STATUS, list.get(i).get("status").toString());
-			getContentResolver().insert(ImageDB.CONTENT_URI, values);
-			System.out.println("Success Insert! " + values.toString());
-		}
-
-		String[] from = { "imagename", "requestid", "status" };
-		int[] to = { R.id.imageName, R.id.imageID, R.id.imageStatus };
+		ContentResolver cr = getContentResolver();
+		Cursor c = cr.query(ImageDB.CONTENT_URI, null, null, null, null);
+		boolean dup = false;
 		
-//		System.out.println("Hello" + list.get(i).get("status").toString());
+		String date = (String) android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date());
+		System.out.println("The date is: " + date);
+
+		for (int i = 0; i < list.size(); i++) {
+			c = cr.query(ImageDB.CONTENT_URI, null, null, null, null);
+			dup = false;
+			
+			if (c.moveToFirst()) {
+				do {
+					String id = c.getString(c
+							.getColumnIndex(ImageDB.KEY_REQUESTID));
+
+					if (list.get(i).get("requestid").toString().equals(id) == true) {
+						// the item is duplicated
+						dup = true;
+						System.out.println("We find the duplicated item " + i);
+						break;
+					}
+
+				} while (c.moveToNext());
+
+				if (dup == false) {// if it is not dumplicated, insert the item.
+					values.clear();
+					values.put(ImageDB.KEY_IMAGENAME,
+							list.get(i).get("imagename").toString());
+					values.put(ImageDB.KEY_REQUESTID,
+							list.get(i).get("requestid").toString());
+					values.put(ImageDB.KEY_STATUS, date);
+					getContentResolver().insert(ImageDB.CONTENT_URI, values);
+					System.out.println("Success Insert! " + values.toString());
+				} // if
+			}// if
+			else { // the database is empty
+				values.clear();
+				values.put(ImageDB.KEY_IMAGENAME, list.get(i).get("imagename")
+						.toString());
+				values.put(ImageDB.KEY_REQUESTID, list.get(i).get("requestid")
+						.toString());
+				values.put(ImageDB.KEY_STATUS, date);
+				getContentResolver().insert(ImageDB.CONTENT_URI, values);
+				System.out.println("Success Insert! " + values.toString());
+			}
+		}
 
 		ArrayList<Map<String, String>> list_active = new ArrayList<Map<String, String>>();
 		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).get("status").toString().equals("loading") 
+			if (list.get(i).get("status").toString().equals("loading")
 					|| list.get(i).get("status").toString().equals("ready")) {
 				boolean add = list_active.add(list.get(i));
 				System.out.println("Active_list adding " + add);
-			}
-			else
+			} else
 				System.out.println("It is not an active item!");
 		}
 
 		if (list_active.size() > 0) {
+			ListView listView = (ListView) findViewById(R.id.listView);
+			String[] actitems = new String[list_active.size()];
+			for (int i=0; i < list_active.size(); i++) {
+				System.out.println("The imgInfo:" + list_active.get(i).toString());
+				String[] splitInfo = list_active.get(i).toString().split(",");
+				String imgInforeqid = "", imgInfostatus = "", imgInfoname = "";
+				for(int j=0; j<splitInfo.length; j++) {
+					if(splitInfo[j].contains("requestid")) {
+						imgInforeqid = splitInfo[j];
+					}
+					if(splitInfo[j].contains("status")) {
+						imgInfostatus = splitInfo[j];
+					}
+					if(splitInfo[j].contains("imagename")) {
+						imgInfoname = splitInfo[j];
+					}
+				}
 
-			SimpleAdapter adapter = new SimpleAdapter(this, list_active,
-					R.layout.row, from, to);
-
-			final ListView listView = (ListView) findViewById(R.id.listView);
-
+				int start = (imgInforeqid).indexOf("requestid=");
+				String reqID = imgInforeqid.substring(start + 10);
+				start = (imgInfostatus).indexOf("status=");
+				String Status = imgInfostatus.substring(start + 7);
+				start = (imgInfoname).indexOf("imagename=");
+				String imgName = imgInfoname.substring(start + 10);
+				reqID = "ID=".concat(reqID).concat(", "); Status = "STS=".concat(Status).concat(", "); imgName = "IMG=".concat(imgName);
+				actitems[i] = reqID.concat(Status).concat(imgName);
+//				System.out.println("the splitInfo is: " + splitInfo[0] + " " + splitInfo[1] + " " + splitInfo[2] + " " + splitInfo[3] + " " + splitInfo[4] + " " + splitInfo[5]);
+			}
+			SpecialAdapter adapter = new SpecialAdapter(this, actitems);
 			listView.setAdapter(adapter);
 			listView.setTextFilterEnabled(true);
 		}
@@ -186,13 +243,13 @@ public class oneButtons extends Activity {
 	private void updateHistory() {
 		ContentResolver cr = getContentResolver();
 		Cursor cursor = cr.query(ImageDB.CONTENT_URI, null, null, null, null);
-
-		String[] from = { ImageDB.KEY_IMAGENAME, ImageDB.KEY_REQUESTID,
-				ImageDB.KEY_STATUS };
-		int[] to = { R.id.imageName, R.id.imageID, R.id.imageStatus };
+		
+		
+		String[] from = { ImageDB.KEY_IMAGENAME, ImageDB.KEY_REQUESTID, ImageDB.KEY_STATUS };
+		int[] to = { R.id.hisimageName, R.id.hisimageID, R.id.hisimageTime };
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-				R.layout.row, cursor, from, to);
-
+				R.layout.hislistrow, cursor, from, to);
+		
 		final ListView listView = (ListView) findViewById(R.id.listView_inactive);
 		listView.setAdapter(adapter);
 		listView.setTextFilterEnabled(true);
@@ -219,6 +276,72 @@ public class oneButtons extends Activity {
 
 		return list;
 	}
+	
+	static class ViewHolder {
+		TextView text;
+	}
+
+	private class SpecialAdapter extends BaseAdapter {
+		// Defining the background color of rows. The row will alternate between
+		// green light and green dark.
+		private int[] colors = new int[] { 0xAAf6ffc8, 0xAA538d00 };
+		private LayoutInflater mInflater;
+
+		// The variable that will hold our text data to be tied to list.
+		private String[] data;
+
+		public SpecialAdapter(Context context, String[] items) {
+			mInflater = LayoutInflater.from(context);
+			this.data = items;
+		}
+
+		@Override
+		public int getCount() {
+			return data.length;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return position;
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		// A view to hold each row in the list
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+
+			// A ViewHolder keeps references to children views to avoid
+			// unneccessary calls
+			// to findViewById() on each row.
+			ViewHolder holder;
+
+			if (convertView == null) {
+				convertView = mInflater.inflate(R.layout.listviewrow, null);
+
+				holder = new ViewHolder();
+				holder.text = (TextView) convertView
+						.findViewById(R.id.headline);
+				convertView.setTag(holder);
+
+			} else {
+				holder = (ViewHolder) convertView.getTag();
+			}
+			// Bind the data efficiently with the holder.
+//			System.out.println("The holder is: " + holder.toString());
+			holder.text.setText(data[position]);
+
+			// Set the background color depending of odd/even colorPos result
+			int colorPos = position % colors.length;
+			convertView.setBackgroundColor(colors[colorPos]);
+
+			return convertView;
+		}
+	}
+
 
 	static int i;
 

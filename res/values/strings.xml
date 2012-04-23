@@ -3,5 +3,6 @@
 
     <string name="hello">Hello World, Android_OBAActivity!</string>
     <string name="app_name">Android_OBA</string>
+    <string name="ProcessBar">Click to Progress Bar</string>
 
 </resources>
