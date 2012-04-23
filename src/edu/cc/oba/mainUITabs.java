@@ -153,11 +153,41 @@ public class mainUITabs extends TabActivity {
             finish();
             return true;
  
-        case R.id.menu_settings:
-            Toast.makeText(getBaseContext(), "Settings : TODO", Toast.LENGTH_SHORT).show();
+        case R.id.menu_about:
+        	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        	builder.setMessage("VCL - One Button App v1.0 \n " +
+        			"This product includes software developed by : \n" +
+        			"the Apache Software Foundation http://www.apache.org/ \n" +
+        			"Android : http://developer.android.com \n" +
+        			"VCL : http://vcl.ncsu.edu")
+        	       .setCancelable(false)
+        	             	       .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+        	           public void onClick(DialogInterface dialog, int id) {
+        	                dialog.cancel();
+        	           }
+        	       });
+        	AlertDialog alert = builder.create();
+        	alert.show();
             return true;
  
-         
+        case R.id.menu_help:
+        	AlertDialog.Builder builder_help = new AlertDialog.Builder(this);
+        	builder_help.setMessage("=====HELP=====\n" +
+        			"This Application is used to reserve and launch applications at the click of a button.\n" +
+        			"1. The entire framework is based on the NCSU's VCL Cloud \n" +
+        			"2. For more information on VCL and other troubleshooting, please visit www.vcl.ncsu.edu \n" +
+        			"3. For troubleshooting information please consult the manual available at the above website\n" +
+        			"4. This application needs external 3rd party Software to launch reservations. Please install Remote Rdp and ConnectBot for Windows and Unix based reservations\n")
+        	       .setCancelable(false)
+        	             	       .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+        	           public void onClick(DialogInterface dialog, int id) {
+        	                dialog.cancel();
+        	           }
+        	       });
+        	AlertDialog alert_help = builder_help.create();
+        	alert_help.show();
+            return true;
+  
         default:
             return super.onOptionsItemSelected(item);
         }

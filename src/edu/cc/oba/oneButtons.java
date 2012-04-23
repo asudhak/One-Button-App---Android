@@ -270,12 +270,31 @@ public class oneButtons extends Activity {
 			// TODO enclose with try catch and handle catch prompting user to
 			// install connectBOT
 			try {
+				
+				
 				Intent intent = new Intent("android.intent.action.VIEW",
 						Uri.parse(Conn_URI));
 				startActivity(intent);
 			} catch (android.content.ActivityNotFoundException ex) {
-				Toast.makeText(getBaseContext(), "Please install connectBot",
-						Toast.LENGTH_LONG).show();
+				AlertDialog.Builder builder_install = new AlertDialog.Builder(this);
+	        	builder_install.setMessage("This action requires ConnectBot to be installed. Do you want to Install connectBot from the market >")
+	        	.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	        	           public void onClick(DialogInterface dialog, int id) {
+	        					Intent goToMarket = new Intent(Intent.ACTION_VIEW)
+	        				    .setData(Uri.parse("market://details?id=org.connectbot"));
+	        				startActivity(goToMarket);
+
+	        	           }
+	        	       })
+	        	       .setCancelable(false)
+	        	             	       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+	        	           public void onClick(DialogInterface dialog, int id) {
+	        	                dialog.cancel();
+	        	           }
+	        	       });
+	        	AlertDialog alert_install = builder_install.create();
+	        	alert_install.show();
+				
 			}
 
 			notificationManager.notify(1, notification);
@@ -344,10 +363,25 @@ public class oneButtons extends Activity {
 			intent.setComponent(new ComponentName("org.toremote.rdpdemo",
 					"com.toremote.RemoteActivity"));
 		} catch (ActivityNotFoundException e) {
-			Toast.makeText(
-					getBaseContext(),
-					"Please install REMOTE RDP from the Android Market to be able to remotely connect to this Reservation",
-					Toast.LENGTH_LONG).show();
+			AlertDialog.Builder builder_install = new AlertDialog.Builder(this);
+        	builder_install.setMessage("This action requires ConnectBot to be installed. Do you want to Install connectBot from the market >")
+        	.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        	           public void onClick(DialogInterface dialog, int id) {
+        					Intent goToMarket = new Intent(Intent.ACTION_VIEW)
+        				    .setData(Uri.parse("market://details?id=org.connectbot"));
+        				startActivity(goToMarket);
+
+        	           }
+        	       })
+        	       .setCancelable(false)
+        	             	       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+        	           public void onClick(DialogInterface dialog, int id) {
+        	                dialog.cancel();
+        	           }
+        	       });
+        	AlertDialog alert_install = builder_install.create();
+        	alert_install.show();
+
 		}
 		intent.putExtra(REMOTE_SERVER, conn_data[0]);
 		intent.putExtra(REMOTE_PORT, PORT);
