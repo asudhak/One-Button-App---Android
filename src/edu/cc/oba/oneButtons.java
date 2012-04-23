@@ -152,7 +152,6 @@ public class oneButtons extends Activity {
 		boolean dup = false;
 		
 		String date = (String) android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date());
-		System.out.println("The date is: " + date);
 
 		for (int i = 0; i < list.size(); i++) {
 			c = cr.query(ImageDB.CONTENT_URI, null, null, null, null);

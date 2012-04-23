@@ -34,6 +34,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class createConnection extends Activity {
     /** Called when the activity is first created. */
+	public static createConnection connect;
 	
 //	public TestOBA oba;
     @Override
@@ -178,7 +179,7 @@ public class createConnection extends Activity {
    	      listView.setTextFilterEnabled(true);
     }
     
-    private ArrayList getUserRequests()
+    public ArrayList getUserRequests()
     {
 Object[] req_id=(Object[]) TestOBA.oba.getRequestIDs().get("requests");
 		
