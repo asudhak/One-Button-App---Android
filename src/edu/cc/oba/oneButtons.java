@@ -239,6 +239,11 @@ public class oneButtons extends Activity {
 
 			int icon = R.drawable.ic_launcher;
 			CharSequence tickerText = conn_data_secure[2];
+			if(conn_data_secure[2].equalsIgnoreCase(Android_OBAActivity.settings.getString("pass", "")))
+			{
+		tickerText = "Use your Campus Password";	
+			}
+	
 			long when = System.currentTimeMillis();
 
 			Notification notification = new Notification(icon, tickerText, when);

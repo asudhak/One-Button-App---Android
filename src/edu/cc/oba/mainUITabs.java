@@ -35,7 +35,8 @@ public class mainUITabs extends TabActivity {
 		catch(NullPointerException e)
 		{
 			Toast.makeText(getBaseContext(), "No Internet ConnectioN Found", 4).show();
-		};
+			finish();
+		}
 		    
 		   try{ if( cm.getActiveNetworkInfo().isConnectedOrConnecting()==false)
 		    {
@@ -44,7 +45,7 @@ public class mainUITabs extends TabActivity {
 		   catch(NullPointerException e)
 	    	  {
 	    		Toast.makeText(getBaseContext(), "No Internet ConnectioN Found", 4).show();
-	    		  
+	    		  finish();
 	    	  }
 		
 		setContentView(R.layout.tab);

@@ -25,11 +25,28 @@ public class Android_OBAActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        ConnectivityManager cm=null;
         
-            ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
-
-            System.out.println(cm.getActiveNetworkInfo().toString());
+        try{
+			cm = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+		}
+		catch(NullPointerException e)
+		{
+			Toast.makeText(getBaseContext(), "No Internet ConnectioN Found", 4).show();
+			finish();
+		}
+		    
+		   try{ if( cm.getActiveNetworkInfo().isConnectedOrConnecting()==false)
+		    {
+		    	Toast.makeText(getBaseContext(), "No Internet ConnectioN Found", 4).show();
+		    }}
+		   catch(NullPointerException e)
+	    	  {
+	    		Toast.makeText(getBaseContext(), "No Internet ConnectioN Found", 4).show();
+	    		finish();
+	    		  
+	    	  }
+		
         
         
         settings = getPreferences(0);
