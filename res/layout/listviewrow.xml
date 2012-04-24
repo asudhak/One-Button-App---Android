@@ -7,7 +7,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <TableRow>
+        <TableRow
+            android:id="@+id/tablerow"
+            android:onClick="loginToPlatform" >
 
             <TextView
                 android:id="@+id/headline"
@@ -16,14 +18,16 @@
                 android:layout_weight="0.8"
                 androidadding="10dp"
                 android:textColor="#FFF"
-                android:textSize="15dp" />
+                android:textSize="15dp" 
+                 />
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="30dp"
                 android:layout_gravity="right"
                 android:layout_marginRight="6dp"
-                android:src="@drawable/arrow_icon" />
+                android:src="@drawable/arrow_icon"
+                 />
         </TableRow>
     </TableLayout>
 

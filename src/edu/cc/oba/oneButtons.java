@@ -48,46 +48,6 @@ public class oneButtons extends Activity {
 
 		updateHistory();
 
-		final ListView listView = (ListView) findViewById(R.id.listView);
-
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> arg0, View v, int position,
-					long id) {
-				// Toast.makeText(getBaseContext(),
-				// ((TextView)v.findViewById(R.id.lngValue)).getText().toString(),4).show();
-
-				int req_id = Integer.parseInt(((TextView) v
-						.findViewById(R.id.imageID)).getText().toString());
-				String imagename = ((TextView) v.findViewById(R.id.imageName))
-						.getText().toString();
-				String status = ((TextView) v.findViewById(R.id.imageStatus))
-						.getText().toString();
-
-				if (status.compareToIgnoreCase("ready") == 0) {
-					String[] conn_data = TestOBA.oba.getConnectData(req_id);
-
-					Toast.makeText(getBaseContext(), conn_data.toString(),
-							Toast.LENGTH_LONG);
-					Log.i("COnnDATA", conn_data.toString());
-
-					if (imagename.contains("Win"))
-						StartRdpIntent(conn_data);
-					else
-						conn_do_ssh(conn_data, imagename);
-				} else if (status.compareToIgnoreCase("loading") == 0) {
-					Toast.makeText(getBaseContext(),
-							"Please wait till your reservation is ready",
-							Toast.LENGTH_LONG).show();
-				} else if (status.compareToIgnoreCase("timedout") == 0) {
-					Toast.makeText(getBaseContext(),
-							"Your reservation has timed out", Toast.LENGTH_LONG)
-							.show();
-				}
-
-			}
-
-		});
-
 		mainUITabs.mTabHost
 				.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
 
@@ -108,38 +68,37 @@ public class oneButtons extends Activity {
 		// Show user active and inactive one buttons
 
 	}
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    if (keyCode == KeyEvent.KEYCODE_BACK) {
-	    	 AlertDialog.Builder adb = new AlertDialog.Builder(this);
-	            adb.setCancelable(true);
-	            
-	            adb.setNeutralButton("Yes", new DialogInterface.OnClickListener(){
-	          	  @Override
-	        		public void onClick(DialogInterface arg0, int arg1) {
-	        			// TODO Auto-generated method stub
-	        			//CODE TO EXTEND RESERVATION
-	          		  finish();
-	        		}
-	            });
-	          	  
-	          	  adb.setMessage("Do you Want to Exit");
-	          	  adb.show();
-	          	  
-	            
-	            adb.setNegativeButton("No", new DialogInterface.OnClickListener(){
-	          	
-	      		@Override
-	      		public void onClick(DialogInterface arg0, int arg1) {
-	      			// TODO Auto-generated method stub
-	      			
-	      			     				
-	      		}
-	          	  
-	            });
-	        return true;
-	    }
-	    return super.onKeyDown(keyCode, event);
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			AlertDialog.Builder adb = new AlertDialog.Builder(this);
+			adb.setCancelable(true);
+
+			adb.setNeutralButton("Yes", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					// TODO Auto-generated method stub
+					// CODE TO EXTEND RESERVATION
+					finish();
+				}
+			});
+
+			adb.setMessage("Do you Want to Exit");
+			adb.show();
+
+			adb.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					// TODO Auto-generated method stub
+
+				}
+
+			});
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	private void updateListView() {
@@ -150,13 +109,14 @@ public class oneButtons extends Activity {
 		ContentResolver cr = getContentResolver();
 		Cursor c = cr.query(ImageDB.CONTENT_URI, null, null, null, null);
 		boolean dup = false;
-		
-		String date = (String) android.text.format.DateFormat.format("yyyy-MM-dd", new java.util.Date());
+
+		String date = (String) android.text.format.DateFormat.format(
+				"yyyy-MM-dd", new java.util.Date());
 
 		for (int i = 0; i < list.size(); i++) {
 			c = cr.query(ImageDB.CONTENT_URI, null, null, null, null);
 			dup = false;
-			
+
 			if (c.moveToFirst()) {
 				do {
 					String id = c.getString(c
@@ -207,18 +167,19 @@ public class oneButtons extends Activity {
 		if (list_active.size() > 0) {
 			ListView listView = (ListView) findViewById(R.id.listView);
 			String[] actitems = new String[list_active.size()];
-			for (int i=0; i < list_active.size(); i++) {
-				System.out.println("The imgInfo:" + list_active.get(i).toString());
+			for (int i = 0; i < list_active.size(); i++) {
+				System.out.println("The imgInfo:"
+						+ list_active.get(i).toString());
 				String[] splitInfo = list_active.get(i).toString().split(",");
 				String imgInforeqid = "", imgInfostatus = "", imgInfoname = "";
-				for(int j=0; j<splitInfo.length; j++) {
-					if(splitInfo[j].contains("requestid")) {
+				for (int j = 0; j < splitInfo.length; j++) {
+					if (splitInfo[j].contains("requestid")) {
 						imgInforeqid = splitInfo[j];
 					}
-					if(splitInfo[j].contains("status")) {
+					if (splitInfo[j].contains("status")) {
 						imgInfostatus = splitInfo[j];
 					}
-					if(splitInfo[j].contains("imagename")) {
+					if (splitInfo[j].contains("imagename")) {
 						imgInfoname = splitInfo[j];
 					}
 				}
@@ -229,9 +190,13 @@ public class oneButtons extends Activity {
 				String Status = imgInfostatus.substring(start + 7);
 				start = (imgInfoname).indexOf("imagename=");
 				String imgName = imgInfoname.substring(start + 10);
-				reqID = "ID=".concat(reqID).concat(", "); Status = "STS=".concat(Status).concat(", "); imgName = "IMG=".concat(imgName);
+				reqID = "ID=".concat(reqID).concat(", ");
+				Status = "STS=".concat(Status).concat(", ");
+				imgName = "IMG=".concat(imgName);
 				actitems[i] = reqID.concat(Status).concat(imgName);
-//				System.out.println("the splitInfo is: " + splitInfo[0] + " " + splitInfo[1] + " " + splitInfo[2] + " " + splitInfo[3] + " " + splitInfo[4] + " " + splitInfo[5]);
+				// System.out.println("the splitInfo is: " + splitInfo[0] + " "
+				// + splitInfo[1] + " " + splitInfo[2] + " " + splitInfo[3] +
+				// " " + splitInfo[4] + " " + splitInfo[5]);
 			}
 			SpecialAdapter adapter = new SpecialAdapter(this, actitems);
 			listView.setAdapter(adapter);
@@ -242,13 +207,12 @@ public class oneButtons extends Activity {
 	private void updateHistory() {
 		ContentResolver cr = getContentResolver();
 		Cursor cursor = cr.query(ImageDB.CONTENT_URI, null, null, null, null);
-		
-		
-		String[] from = { ImageDB.KEY_IMAGENAME, ImageDB.KEY_REQUESTID, ImageDB.KEY_STATUS };
-		int[] to = { R.id.hisimageName, R.id.hisimageID, R.id.hisimageTime };
+
+		String[] from = { ImageDB.KEY_IMAGENAME, ImageDB.KEY_STATUS };
+		int[] to = { R.id.hisimageName, R.id.hisimageTime };
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
 				R.layout.hislistrow, cursor, from, to);
-		
+
 		final ListView listView = (ListView) findViewById(R.id.listView_inactive);
 		listView.setAdapter(adapter);
 		listView.setTextFilterEnabled(true);
@@ -275,7 +239,7 @@ public class oneButtons extends Activity {
 
 		return list;
 	}
-	
+
 	static class ViewHolder {
 		TextView text;
 	}
@@ -330,7 +294,7 @@ public class oneButtons extends Activity {
 				holder = (ViewHolder) convertView.getTag();
 			}
 			// Bind the data efficiently with the holder.
-//			System.out.println("The holder is: " + holder.toString());
+			// System.out.println("The holder is: " + holder.toString());
 			holder.text.setText(data[position]);
 
 			// Set the background color depending of odd/even colorPos result
@@ -340,7 +304,6 @@ public class oneButtons extends Activity {
 			return convertView;
 		}
 	}
-
 
 	static int i;
 
@@ -361,26 +324,26 @@ public class oneButtons extends Activity {
 
 			int icon = R.drawable.ic_launcher;
 			CharSequence tickerText = conn_data_secure[2];
-			if(conn_data_secure[2].equalsIgnoreCase(Android_OBAActivity.settings.getString("pass", "")))
-			{
-		tickerText = "Use your Campus Password";	
+			if (conn_data_secure[2]
+					.equalsIgnoreCase(Android_OBAActivity.settings.getString(
+							"pass", ""))) {
+				tickerText = "Use your Campus Password";
 			}
-	
+
 			long when = System.currentTimeMillis();
 
 			Notification notification = new Notification(icon, tickerText, when);
 
 			CharSequence contentTitle = "Password for this reservation is";
-			
+
 			CharSequence contentText = conn_data_secure[2];
-			//If password and stored password are the same
-			if(conn_data_secure[2].equalsIgnoreCase(Android_OBAActivity.settings.getString("pass", "")))
-					{
-				contentText = "Use your Campus Password";	
-					}
-			
-			
-			
+			// If password and stored password are the same
+			if (conn_data_secure[2]
+					.equalsIgnoreCase(Android_OBAActivity.settings.getString(
+							"pass", ""))) {
+				contentText = "Use your Campus Password";
+			}
+
 			Intent notificationIntent = new Intent(this, oneButtons.class);
 			PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 					notificationIntent, 0);
@@ -392,31 +355,38 @@ public class oneButtons extends Activity {
 			// TODO enclose with try catch and handle catch prompting user to
 			// install connectBOT
 			try {
-				
-				
+
 				Intent intent = new Intent("android.intent.action.VIEW",
 						Uri.parse(Conn_URI));
 				startActivity(intent);
 			} catch (android.content.ActivityNotFoundException ex) {
-				AlertDialog.Builder builder_install = new AlertDialog.Builder(this);
-	        	builder_install.setMessage("This action requires ConnectBot to be installed. Do you want to Install connectBot from the market >")
-	        	.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-	        	           public void onClick(DialogInterface dialog, int id) {
-	        					Intent goToMarket = new Intent(Intent.ACTION_VIEW)
-	        				    .setData(Uri.parse("market://details?id=org.connectbot"));
-	        				startActivity(goToMarket);
+				AlertDialog.Builder builder_install = new AlertDialog.Builder(
+						this);
+				builder_install
+						.setMessage(
+								"This action requires ConnectBot to be installed. Do you want to Install connectBot from the market >")
+						.setPositiveButton("Yes",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int id) {
+										Intent goToMarket = new Intent(
+												Intent.ACTION_VIEW).setData(Uri
+												.parse("market://details?id=org.connectbot"));
+										startActivity(goToMarket);
 
-	        	           }
-	        	       })
-	        	       .setCancelable(false)
-	        	             	       .setNegativeButton("No", new DialogInterface.OnClickListener() {
-	        	           public void onClick(DialogInterface dialog, int id) {
-	        	                dialog.cancel();
-	        	           }
-	        	       });
-	        	AlertDialog alert_install = builder_install.create();
-	        	alert_install.show();
-				
+									}
+								})
+						.setCancelable(false)
+						.setNegativeButton("No",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int id) {
+										dialog.cancel();
+									}
+								});
+				AlertDialog alert_install = builder_install.create();
+				alert_install.show();
+
 			}
 
 			notificationManager.notify(1, notification);
@@ -425,6 +395,57 @@ public class oneButtons extends Activity {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	public void loginToPlatform(View v) {
+		System.out.println("HELLO, THIS IS HAIQING");
+
+		String text = ((TextView) v.findViewById(R.id.headline)).getText()
+				.toString();
+		System.out.println("The textInfo is: " + text);
+		// // final ListView listView = (ListView) findViewById(R.id.listView);
+		// //
+		// // listView.setOnItemClickListener(new OnItemClickListener() {
+		// // public void onItemClick(AdapterView<?> arg0, View v, int position,
+		// // long id) {
+		// // Toast.makeText(getBaseContext(),
+		// //
+		// ((TextView)v.findViewById(R.id.lngValue)).getText().toString(),4).show();
+
+		int start = text.indexOf("ID=");
+		int end = text.indexOf("STS=");
+		int req_id = Integer.parseInt(text.substring(start + 3, end - 2));
+
+		start = text.indexOf("STS=");
+		end = text.indexOf("IMG=");
+		String status = text.substring(start + 4, end - 2);
+
+		start = text.indexOf("IMG=");
+		end = text.indexOf("}");
+		String imagename = text.substring(start + 4, end);
+
+		// System.out.println("ID: " + req_id + " STS: " + status + " IMG: " +
+		// imagename);
+
+		if (status.compareToIgnoreCase("ready") == 0) {
+			String[] conn_data = TestOBA.oba.getConnectData(req_id);
+
+			Toast.makeText(getBaseContext(), conn_data.toString(),
+					Toast.LENGTH_LONG);
+			Log.i("COnnDATA", conn_data.toString());
+
+			if (imagename.contains("Win"))
+				StartRdpIntent(conn_data);
+			else
+				conn_do_ssh(conn_data, imagename);
+		} else if (status.compareToIgnoreCase("loading") == 0) {
+			Toast.makeText(getBaseContext(),
+					"Please wait till your reservation is ready",
+					Toast.LENGTH_LONG).show();
+		} else if (status.compareToIgnoreCase("timedout") == 0) {
+			Toast.makeText(getBaseContext(), "Your reservation has timed out",
+					Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -486,23 +507,30 @@ public class oneButtons extends Activity {
 					"com.toremote.RemoteActivity"));
 		} catch (ActivityNotFoundException e) {
 			AlertDialog.Builder builder_install = new AlertDialog.Builder(this);
-        	builder_install.setMessage("This action requires ConnectBot to be installed. Do you want to Install connectBot from the market >")
-        	.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-        	           public void onClick(DialogInterface dialog, int id) {
-        					Intent goToMarket = new Intent(Intent.ACTION_VIEW)
-        				    .setData(Uri.parse("market://details?id=org.connectbot"));
-        				startActivity(goToMarket);
+			builder_install
+					.setMessage(
+							"This action requires ConnectBot to be installed. Do you want to Install connectBot from the market >")
+					.setPositiveButton("Yes",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									Intent goToMarket = new Intent(
+											Intent.ACTION_VIEW).setData(Uri
+											.parse("market://details?id=org.connectbot"));
+									startActivity(goToMarket);
 
-        	           }
-        	       })
-        	       .setCancelable(false)
-        	             	       .setNegativeButton("No", new DialogInterface.OnClickListener() {
-        	           public void onClick(DialogInterface dialog, int id) {
-        	                dialog.cancel();
-        	           }
-        	       });
-        	AlertDialog alert_install = builder_install.create();
-        	alert_install.show();
+								}
+							})
+					.setCancelable(false)
+					.setNegativeButton("No",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+			AlertDialog alert_install = builder_install.create();
+			alert_install.show();
 
 		}
 		intent.putExtra(REMOTE_SERVER, conn_data[0]);

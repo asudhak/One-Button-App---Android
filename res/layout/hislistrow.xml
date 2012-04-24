@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/hisimageName"
-        android:layout_width="20px"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.8"
         android:textSize="15sp" >
@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/hisimageTime"
-        android:layout_width="0px"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.8"
         android:textSize="15sp" >
