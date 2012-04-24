@@ -27,7 +27,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="#9900CC"
-        android:text="My OneButtons (IMG, DATE)"
+        android:text="My OneButtons (NAME, ID)"
         android:textColor="#FFFFFF"
         android:textSize="17dp"
         android:textStyle="bold" >

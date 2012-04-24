@@ -104,11 +104,17 @@ public class oneButtons extends Activity {
 	private void updateListView() {
 		ArrayList<Map<String, String>> list = build();
 
-		/* here we add the item into the history database! */
+		// System.out.println("The list value is: " + list.toString());
+
+		/*
+		 * here we add the item into the history database! One confusion here is
+		 * that the requestid actually stores imageid
+		 */
 		ContentValues values = new ContentValues();
 		ContentResolver cr = getContentResolver();
 		Cursor c = cr.query(ImageDB.CONTENT_URI, null, null, null, null);
 		boolean dup = false;
+		cr.delete(ImageDB.CONTENT_URI, null, null);
 
 		String date = (String) android.text.format.DateFormat.format(
 				"yyyy-MM-dd", new java.util.Date());
@@ -119,10 +125,11 @@ public class oneButtons extends Activity {
 
 			if (c.moveToFirst()) {
 				do {
-					String id = c.getString(c
-							.getColumnIndex(ImageDB.KEY_REQUESTID));
+					String imagename = c.getString(c
+							.getColumnIndex(ImageDB.KEY_IMAGENAME));
 
-					if (list.get(i).get("requestid").toString().equals(id) == true) {
+					if (list.get(i).get("imagename").toString()
+							.equals(imagename) == true) {
 						// the item is duplicated
 						dup = true;
 						System.out.println("We find the duplicated item " + i);
@@ -135,8 +142,8 @@ public class oneButtons extends Activity {
 					values.clear();
 					values.put(ImageDB.KEY_IMAGENAME,
 							list.get(i).get("imagename").toString());
-					values.put(ImageDB.KEY_REQUESTID,
-							list.get(i).get("requestid").toString());
+					values.put(ImageDB.KEY_REQUESTID, list.get(i)
+							.get("imageid").toString());
 					values.put(ImageDB.KEY_STATUS, date);
 					getContentResolver().insert(ImageDB.CONTENT_URI, values);
 					System.out.println("Success Insert! " + values.toString());
@@ -146,7 +153,7 @@ public class oneButtons extends Activity {
 				values.clear();
 				values.put(ImageDB.KEY_IMAGENAME, list.get(i).get("imagename")
 						.toString());
-				values.put(ImageDB.KEY_REQUESTID, list.get(i).get("requestid")
+				values.put(ImageDB.KEY_REQUESTID, list.get(i).get("imageid")
 						.toString());
 				values.put(ImageDB.KEY_STATUS, date);
 				getContentResolver().insert(ImageDB.CONTENT_URI, values);
@@ -155,6 +162,7 @@ public class oneButtons extends Activity {
 		}
 
 		ArrayList<Map<String, String>> list_active = new ArrayList<Map<String, String>>();
+		System.out.println("The listInfo is: " + list.toString());
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).get("status").toString().equals("loading")
 					|| list.get(i).get("status").toString().equals("ready")) {
@@ -204,18 +212,57 @@ public class oneButtons extends Activity {
 		}
 	}
 
+	int img_id = 0;
+	
 	private void updateHistory() {
 		ContentResolver cr = getContentResolver();
 		Cursor cursor = cr.query(ImageDB.CONTENT_URI, null, null, null, null);
 
-		String[] from = { ImageDB.KEY_IMAGENAME, ImageDB.KEY_STATUS };
-		int[] to = { R.id.hisimageName, R.id.hisimageTime };
+		String[] from = { ImageDB.KEY_IMAGENAME, ImageDB.KEY_REQUESTID };
+		int[] to = { R.id.hisimageName, R.id.hisimageID };
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
 				R.layout.hislistrow, cursor, from, to);
 
 		final ListView listView = (ListView) findViewById(R.id.listView_inactive);
 		listView.setAdapter(adapter);
 		listView.setTextFilterEnabled(true);
+
+		// setup the function of re-activate the image in the favorite list
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> arg0, View v, int position,
+					long id) {
+
+				img_id = Integer.parseInt(((TextView) v
+						.findViewById(R.id.hisimageID)).getText().toString());
+				
+				AlertDialog.Builder adbHis = new AlertDialog.Builder(oneButtons.this);
+				adbHis.setCancelable(true);
+
+				adbHis.setNeutralButton("Yes", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						// TODO Auto-generated method stub
+						// CODE TO EXTEND RESERVATION
+						System.out.println("Start to make the reservation! The imgID=" + img_id);
+						TestOBA.oba.makeReservation(img_id);
+						updateListView();
+					}
+				});
+
+				adbHis.setMessage("Do you Want to Activate This Image?");
+				adbHis.show();
+
+				adbHis.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						// TODO Auto-generated method stub
+
+					}
+
+				});
+			}
+		});
 
 	}
 
@@ -399,19 +446,8 @@ public class oneButtons extends Activity {
 	}
 
 	public void loginToPlatform(View v) {
-		System.out.println("HELLO, THIS IS HAIQING");
-
 		String text = ((TextView) v.findViewById(R.id.headline)).getText()
 				.toString();
-		System.out.println("The textInfo is: " + text);
-		// // final ListView listView = (ListView) findViewById(R.id.listView);
-		// //
-		// // listView.setOnItemClickListener(new OnItemClickListener() {
-		// // public void onItemClick(AdapterView<?> arg0, View v, int position,
-		// // long id) {
-		// // Toast.makeText(getBaseContext(),
-		// //
-		// ((TextView)v.findViewById(R.id.lngValue)).getText().toString(),4).show();
 
 		int start = text.indexOf("ID=");
 		int end = text.indexOf("STS=");

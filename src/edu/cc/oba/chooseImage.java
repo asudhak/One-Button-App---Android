@@ -39,7 +39,7 @@ public class chooseImage extends Activity {
 	Button processBar;
 	int typeBar; // Determines type progress bar: 0 = spinner, 1 = horizontal
 	int delay = 1000; // Milliseconds of delay in the update loop (1 second)
-	int maxBarValue = 200; // Maximum value of horizontal progress bar
+	int maxBarValue = 100; // Maximum value of horizontal progress bar
 	long initTime = 0;
 
 	@Override
